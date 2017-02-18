@@ -5,8 +5,8 @@
 #include <vector> 
 #include <iostream>
 
-const int MAX_WORD = 256;
-const int NUM = 10;
+const int MAX_WORD = 2000;
+const int NUM = 50;
 std::string prepare(const std::string& s)
 {
 	std::string result = s;
@@ -61,9 +61,11 @@ int main()
 	}
 	
 	std::sort(s.begin(), s.end(), compare);
+	
+	std::ofstream fout("result.txt");
 	for (i = 0; i < NUM; i++) 
 	{
-		std::cout << s[i].word << " : " << s[i].count << std::endl;
+		fout << s[i].word << " : " << s[i].count << std::endl;
 	}
 
 	return 0;
