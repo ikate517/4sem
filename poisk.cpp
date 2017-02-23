@@ -12,6 +12,8 @@ std::string prepare(const std::string& s)
 	std::string result = s;
 	std::transform(s.begin(), s.end(), result.begin(), ::tolower);
 	std::string symbols = ".,/:;'!?_+=#@";
+	
+	// result[result.size() - 1] можно написать короче: result.back()
 	for(int i = 0; i < symbols.size(); i++)
 		if (result[result.size() - 1] == symbols[i])
 			result.pop_back();
@@ -24,6 +26,12 @@ struct Statistics
 	std::string word;
 };
 
+/*
+Не круто, когда в названии переменных есть цифра...это значит, что фантазия совсем кончилась + из названия 
+совсем непонятно, какой смысл несут цифры.
+Обычно в случае компараторов или бинарных операторов используют названия переменных
+lhs и rhs : left-hand side, right-hand side
+*/
 bool compare(const Statistics& s1, const Statistics& s2) 
 {
 	if (s1.count != s2.count) 
