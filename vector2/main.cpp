@@ -10,7 +10,7 @@ int main()
 	std::cout << "("<< v2 << ") / 2 = " << v1 << std::endl;
 	v1 = 3 * v2;
 	std::cout << "3 * ("<< v2 << ") = " << v1 << std::endl;
-	std::cout << "("<< v1 << ") squareLen = " << v1.squareLen() << std::endl;
+	std::cout << "("<< v1 << ") squareLen = " << v1.SquareLen() << std::endl;
 	Vector2 v3 = v2 * 3;
 	std::cout << "("<< v2 << ") * 3 = " << v3 << std::endl;
 	v1 += v2;
@@ -22,8 +22,8 @@ int main()
 	float mul_v = v1 ^ v2;
 	std::cout << " ("<< v1 << ") * ("<< v2 << ") = " << mul_s << "      " << "("<< v1 << ") ^ (" << v2 << ") = " << mul_v << std::endl;
 	std::cout << " - (" << v3 << ") = (" << -v3 << " )" << std::endl;
-	v2 = v1.getRotated(1.57);
-	std::cout << "("<< v1 << ") rotate 1.57 = " << v2 << "      ("<< v1 << ") rotate 2 = " << v1.rotate(2) << std::endl;
+	v2 = v1.GetRotated(1.57);
+	std::cout << "("<< v1 << ") rotate 1.57 = " << v2 << "      ("<< v1 << ") rotate 2 = " << v1.Rotate(2) << std::endl;
 	std::cout << "("<< v1 << ")  (" << v2 << ") " << std::endl;
 	v1 *= 5;
 	v2 /= 2;

@@ -6,6 +6,12 @@ Vector2::Vector2(float _x, float _y)
 		y = _y;
 	}
 
+Vector2::Vector2()
+{
+	x = 0;
+	y = 0;
+}
+
 Vector2 Vector2::operator * (float k) const
 {
 	return Vector2(x * k, y * k);
@@ -18,22 +24,12 @@ Vector2 Vector2::operator / (float k) const
 
 Vector2 Vector2::operator + (const Vector2& other) const
 {
-	Vector2::Vector2 v2(0, 0);
-	v2.x = other.x + x;
-	v2.y = other.y + y;
-	return v2;
-	/*
-	fixit: в одну строку return Vector2(x + other.x, y + other.y);
-	*/
+	return Vector2(x + other.x, y + other.y);
 }
 
 Vector2 Vector2::operator - (const Vector2& other) const
 {
-	Vector2::Vector2 v2(0, 0);
-	v2.x = x - other.x;
-	v2.y = y - other.y;
-	/* в одну строку */
-	return v2;
+	return Vector2(x - other.x, y - other.y);
 }
 
 Vector2& Vector2::operator += (const Vector2& other)
@@ -86,18 +82,15 @@ float Vector2::Len() const
 	return sqrt(x * x + y * y);
 }
 
-float Vector2::squareLen() const
+float Vector2::SquareLen() const
 {
 	return (x * x + y * y);
 }
 
 Vector2 Vector2::Norm() const
 {
-	Vector2 result(0, 0);
-	result.x = x/Len();
-	result.y = y/Len();
-	// в одну строку. в целях оптимизации производительности длину можно один раз посчитать и запомнить, т.к. корень - относительно дорогая операция
-	return result;
+	float len = Len();
+	return Vector2(x / len, y / len);
 }
 
 Vector2 Vector2::Perpendicular() const
@@ -107,9 +100,7 @@ Vector2 Vector2::Perpendicular() const
 
 float Vector2::operator * (const Vector2& other) const
 {
-	float result = other.x * x + other.y * y;
-	// можно в одну строку писать без вспомогательной переменной
-	return result;
+	return (other.x * x + other.y * y);
 }
 
 float Vector2::operator ^ (const Vector2& other) const
@@ -123,22 +114,15 @@ Vector2 Vector2::operator - () const
 	return Vector2(-x, -y);
 }
 
-Vector2& Vector2::rotate(float angle)
+Vector2& Vector2::Rotate(float angle)
 {
-	// fixit: у вас неправильный код ... во второй строке x уже измененный подаете
-	x = x * cos(angle) - y * sin(angle);
-	y = x * sin(angle) + y * cos(angle);
+	float _x = x, _y = y;
+	x = _x * cos(angle) - _y * sin(angle);
+	y = _x * sin(angle) + _y * cos(angle);
 	return *this;
 }
 
-Vector2 Vector2::getRotated (float angle) const
+Vector2 Vector2::GetRotated (float angle) const
 {
-	// fix it: код правильный, но два раза писать одни и те же ф-лы не круто
-	// если прошлый метод исправить, то можно написать в одну строку return Vector2(x, y).rotate(angle);
-	/// и ещё ... напишите пустой конструктор Vector2(), чтобы не приходило каждый раз для взякий временных переменных сразу
-	// инициализировать их явно
-	Vector2 result(0, 0);
-	result.x = x * cos(angle) - y * sin(angle);
-	result.y = x * sin(angle) + y * cos(angle);
-	return result;
+	return Vector2(x, y).Rotate(angle);
 }
