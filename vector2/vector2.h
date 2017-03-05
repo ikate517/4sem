@@ -16,6 +16,11 @@ struct Vector2
 	friend Vector2 operator * (float k, const Vector2& v); 
 	friend std::ostream& operator << (std::ostream& stream, const Vector2& v);
 	friend std::istream& operator >> (std::istream& stream, Vector2& v);
+	
+	/*
+	fixit : у вас стили именования методов разные ... определитесь как больше нравится ...
+	пишите, например, всегда первую букву строчной
+	*/
 	float Len() const;
 	float squareLen() const;
 	Vector2 Norm() const;
