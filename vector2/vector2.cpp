@@ -22,6 +22,9 @@ Vector2 Vector2::operator + (const Vector2& other) const
 	v2.x = other.x + x;
 	v2.y = other.y + y;
 	return v2;
+	/*
+	fixit: в одну строку return Vector2(x + other.x, y + other.y);
+	*/
 }
 
 Vector2 Vector2::operator - (const Vector2& other) const
@@ -29,6 +32,7 @@ Vector2 Vector2::operator - (const Vector2& other) const
 	Vector2::Vector2 v2(0, 0);
 	v2.x = x - other.x;
 	v2.y = y - other.y;
+	/* в одну строку */
 	return v2;
 }
 
@@ -92,6 +96,7 @@ Vector2 Vector2::Norm() const
 	Vector2 result(0, 0);
 	result.x = x/Len();
 	result.y = y/Len();
+	// в одну строку. в целях оптимизации производительности длину можно один раз посчитать и запомнить, т.к. корень - относительно дорогая операция
 	return result;
 }
 
@@ -103,6 +108,7 @@ Vector2 Vector2::Perpendicular() const
 float Vector2::operator * (const Vector2& other) const
 {
 	float result = other.x * x + other.y * y;
+	// можно в одну строку писать без вспомогательной переменной
 	return result;
 }
 
@@ -119,6 +125,7 @@ Vector2 Vector2::operator - () const
 
 Vector2& Vector2::rotate(float angle)
 {
+	// fixit: у вас неправильный код ... во второй строке x уже измененный подаете
 	x = x * cos(angle) - y * sin(angle);
 	y = x * sin(angle) + y * cos(angle);
 	return *this;
@@ -126,6 +133,10 @@ Vector2& Vector2::rotate(float angle)
 
 Vector2 Vector2::getRotated (float angle) const
 {
+	// fix it: код правильный, но два раза писать одни и те же ф-лы не круто
+	// если прошлый метод исправить, то можно написать в одну строку return Vector2(x, y).rotate(angle);
+	/// и ещё ... напишите пустой конструктор Vector2(), чтобы не приходило каждый раз для взякий временных переменных сразу
+	// инициализировать их явно
 	Vector2 result(0, 0);
 	result.x = x * cos(angle) - y * sin(angle);
 	result.y = x * sin(angle) + y * cos(angle);
