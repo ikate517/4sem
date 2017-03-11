@@ -44,12 +44,24 @@ struct Map
 			b.update(dt);
 		}
 	}
+	/*
+	fixit:
+	bool bullet_delete(const Bullet& bullet) const
+	*/
 	bool bullet_delete(Bullet bullet)
 	{
+		/*
+		лучше не писать лишнего (у оператора < больше приоритет, чем у ||):
+		return bullet.pos.x > size.x || bullet.pos.x < 0 || bullet.pos.y > size.y || bullet.pos.y < 0;
+		*/
 		if ((bullet.pos.x > size.x) || (bullet.pos.x < 0) || (bullet.pos.y > size.y) || (bullet.pos.y < 0))
 			return true;
 		return false;
 	}
+	
+	/*
+	fixit: Vector2 check_pos(const Vector2& position) const
+	*/
 	Vector2 check_pos(Vector2 position)
 	{
 		Vector2 result = position;
@@ -146,6 +158,10 @@ int main()
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
+			/*
+			сделали бы отдельную ф-ю drawLaser, передав ей window, hero и т.д., чтобы не загромождать код.
+			также drarHero и drawBullet...
+			*/
 			lazer.len.y += lazer.velocity;
 			lazer.pos = map.hero.pos;
 			rectangle.setSize(sf::Vector2f(lazer.len.x, lazer.len.y));
@@ -158,6 +174,10 @@ int main()
 			lazer.len.y = 0;
 		}
 
+		/*
+		если вам не нужны индексы элементов, то лучше писать 
+		for (auto& bullet : map.bullets)
+		*/
 		for (auto itr = map.bullets.begin(); itr != map.bullets.end(); ++itr)
 		{
 			tmp = itr->pos + itr->velocity;
@@ -174,6 +194,10 @@ int main()
 				itr--;
 			}
 		}
+		
+		/*
+		fixit: нужно измерить, сколько времени прошло за 1 кадр и в качестве dt поставить именно его
+		*/
 		map.update(1);
 		window.display();
 	}
