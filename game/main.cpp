@@ -45,11 +45,6 @@ struct Map
 		}
 	}
 
-	bool bullet_delete(const Bullet& bullet) const
-	{
-		return bullet.pos.x > size.x || bullet.pos.x < 0 || bullet.pos.y > size.y || bullet.pos.y < 0;
-	}
-	
 	Vector2 check_pos(const Vector2& position) const
 	{
 		Vector2 result = position;
@@ -60,10 +55,15 @@ struct Map
 		if (position.y > size.y)
 			result.y = indent;
 		if (position.y < 0)
-			result.y  = size.y - indent;
+			result.y = size.y - indent;
 		return result;
 	}
-	
+
+	bool bullet_delete(const Bullet& bullet) const
+	{
+		return bullet.pos.x > size.x || bullet.pos.x < 0 || bullet.pos.y > size.y || bullet.pos.y < 0;
+	}
+
 };
 
 int main()
@@ -78,6 +78,7 @@ int main()
 	lazer.len = Vector2(4, 0);
 	float last_time = 0;
 	Vector2 tmp;
+	float prev_time = 0;
 	sf::Texture texture;
 	texture.loadFromFile("homer.png");
 	sf::Sprite circle(texture);
@@ -111,37 +112,37 @@ int main()
 		{
 			switch (event.type)
 			{
-				case sf::Event::Closed:
-					window.close();
-					break;
-				case sf::Event::KeyPressed:
+			case sf::Event::Closed:
+				window.close();
+				break;
+			case sf::Event::KeyPressed:
+			{
+				if (event.key.code == sf::Keyboard::Left)
 				{
-					if (event.key.code == sf::Keyboard::Left)
-					{
-						map.hero.velocity = Vector2(-V, 0);
-					}
-					if (event.key.code == sf::Keyboard::Right)
-					{
-						map.hero.velocity = Vector2(V, 0);
-					}
-					if (event.key.code == sf::Keyboard::Up)
-					{
-						map.hero.velocity = Vector2(0, -V);
-					}
-					if (event.key.code == sf::Keyboard::Down)
-					{
-						map.hero.velocity = Vector2(0, V);
-					}
+					map.hero.velocity = Vector2(-V, 0);
 				}
-				case sf::Event::MouseButtonPressed:
-					if (event.key.code == sf::Mouse::Left)
-					{
-						bull.pos = map.hero.pos;
-						bull.velocity = d.Norm() * 3;
-						map.bullets.push_back(bull);
-					}
-				default:
-					break;
+				if (event.key.code == sf::Keyboard::Right)
+				{
+					map.hero.velocity = Vector2(V, 0);
+				}
+				if (event.key.code == sf::Keyboard::Up)
+				{
+					map.hero.velocity = Vector2(0, -V);
+				}
+				if (event.key.code == sf::Keyboard::Down)
+				{
+					map.hero.velocity = Vector2(0, V);
+				}
+			}
+			case sf::Event::MouseButtonPressed:
+				if (event.key.code == sf::Mouse::Left)
+				{
+					bull.pos = map.hero.pos;
+					bull.velocity = d.Norm() * 300;
+					map.bullets.push_back(bull);
+				}
+			default:
+				break;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
@@ -160,26 +161,10 @@ int main()
 
 		for (auto& bullet : map.bullets)
 		{
-			/*
-				размерность не сходится. видимо тут ошибка: к метрам прибавляете м/с
-				зачем это вообще писать ... у вас же метод update делает примерно то же самое...
-			*/
-			tmp = bullet.pos + bullet.velocity;
-			circle1.setPosition(tmp.x, tmp.y);
-			bullet.pos = tmp;
+			circle1.setPosition(bullet.pos.x, bullet.pos.y);
 			window.draw(circle1);
 		}
-		
-		/*
-			этот цикл с удалением пуль можно написать короче:
-			auto& b = map.bullets;
-			b.erase(std::remove_if(b.begin(), b.end(), map.bullet_delete), b.end());
 
-			см. http://alenacpp.blogspot.ru/2005/10/stdremove-stdremoveif.html
-			https://en.wikipedia.org/wiki/Erase%E2%80%93remove_idiom
-
-			возможно компилятор поругается на map.bullet_delete... если так, то вынесете эту ф-ю из класса map, и точно всё ок будет
-		*/
 		for (auto itr = map.bullets.begin(); itr != map.bullets.end(); ++itr)
 		{
 
@@ -189,7 +174,8 @@ int main()
 				itr--;
 			}
 		}
-		map.update(time.asSeconds());
+		map.update(time.asSeconds() - prev_time);
+		prev_time = time.asSeconds();
 		window.display();
 	}
 	return 0;
