@@ -160,11 +160,26 @@ int main()
 
 		for (auto& bullet : map.bullets)
 		{
+			/*
+				размерность не сходится. видимо тут ошибка: к метрам прибавляете м/с
+				зачем это вообще писать ... у вас же метод update делает примерно то же самое...
+			*/
 			tmp = bullet.pos + bullet.velocity;
 			circle1.setPosition(tmp.x, tmp.y);
 			bullet.pos = tmp;
 			window.draw(circle1);
 		}
+		
+		/*
+			этот цикл с удалением пуль можно написать короче:
+			auto& b = map.bullets;
+			b.erase(std::remove_if(b.begin(), b.end(), map.bullet_delete), b.end());
+
+			см. http://alenacpp.blogspot.ru/2005/10/stdremove-stdremoveif.html
+			https://en.wikipedia.org/wiki/Erase%E2%80%93remove_idiom
+
+			возможно компилятор поругается на map.bullet_delete... если так, то вынесете эту ф-ю из класса map, и точно всё ок будет
+		*/
 		for (auto itr = map.bullets.begin(); itr != map.bullets.end(); ++itr)
 		{
 
