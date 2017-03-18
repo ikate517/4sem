@@ -10,6 +10,7 @@ public:
 	};
 	Vector2 getImpulse() const
 	{
+		// лучше просто return mass * velocity; 
 		return Vector2(mass * velocity);
 	};
 	Vector2 position;
